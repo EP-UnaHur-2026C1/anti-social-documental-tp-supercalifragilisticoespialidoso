@@ -1,19 +1,7 @@
-export const tagModel = (sequelize, DataTypes) => {
-  const Tag = sequelize.define(
-    'Tag',
-    {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-    },
-    { tableName: 'Tags', timestamps: false },
-  )
+import mongoose from 'mongoose'
 
-  Tag.associate = (models) => {
-    Tag.belongsToMany(models.Post, { through: 'PostTag', as: 'posts', foreignKey: 'tagId' })
-  }
+const tagSchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+})
 
-  return Tag
-}
+export const Tag = mongoose.model('Tag', tagSchema)

@@ -1,25 +1,17 @@
-export const postModel = (sequelize, DataTypes) => {
-  const Post = sequelize.define(
-    'Post',
-    {
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-    },
-    { tableName: 'Posts', timestamps: true },
-  )
+import mongoose from 'mongoose'
 
-  Post.associate = (models) => {
-    Post.belongsTo(models.User, { foreignKey: 'userId', as: 'user' })
-    Post.hasMany(models.PostImage, { foreignKey: 'postId', as: 'images' })
-    Post.hasMany(models.Comment, { foreignKey: 'postId', as: 'comments' })
-    Post.belongsToMany(models.Tag, { through: 'PostTag', as: 'tags', foreignKey: 'postId' })
-  }
+const postImageSchema = new mongoose.Schema({
+  url: { type: String, required: true },
+})
 
-  return Post
-}
+const postSchema = new mongoose.Schema(
+  {
+    description: { type: String, required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    images: [postImageSchema],
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
+  },
+  { timestamps: true },
+)
+
+export const Post = mongoose.model('Post', postSchema)

@@ -1,27 +1,20 @@
-import { User, Post } from '../models/index.js'
+import { User } from '../models/index.js'
 
-export const findAll = () => User.findAll()
+export const findAll = () => User.find()
 
-export const findById = (id) => User.findByPk(id)
+export const findById = (id) => User.findById(id)
 
 export const findByIdWithRelations = (id) =>
-  User.findByPk(id, {
-    include: [
-      { model: Post, as: 'posts' },
-      { model: User, as: 'followers', attributes: ['id', 'nickName', 'name'] },
-      { model: User, as: 'following', attributes: ['id', 'nickName', 'name'] },
-    ],
-  })
+  User.findById(id)
+    .populate('posts')
+    .populate('followers', '_id nickName name')
+    .populate('following', '_id nickName name')
 
 export const findByIdWithFollowers = (id) =>
-  User.findByPk(id, {
-    include: [{ model: User, as: 'followers', attributes: ['id', 'nickName', 'name'] }],
-  })
+  User.findById(id).populate('followers', '_id nickName name')
 
 export const findByIdWithFollowing = (id) =>
-  User.findByPk(id, {
-    include: [{ model: User, as: 'following', attributes: ['id', 'nickName', 'name'] }],
-  })
+  User.findById(id).populate('following', '_id nickName name')
 
 export const create = (data) => User.create(data)
 
@@ -30,8 +23,16 @@ export const update = (user, data) => {
   return user.save()
 }
 
-export const remove = (user) => user.destroy()
+export const remove = (user) => user.deleteOne()
 
-export const addFollowing = (follower, followed) => follower.addFollowing(followed)
+export const addFollowing = async (follower, followed) => {
+  follower.following.push(followed._id)
+  followed.followers.push(follower._id)
+  await Promise.all([follower.save(), followed.save()])
+}
 
-export const removeFollowing = (follower, followed) => follower.removeFollowing(followed)
+export const removeFollowing = async (follower, followed) => {
+  follower.following.pull(followed._id)
+  followed.followers.pull(follower._id)
+  await Promise.all([follower.save(), followed.save()])
+}

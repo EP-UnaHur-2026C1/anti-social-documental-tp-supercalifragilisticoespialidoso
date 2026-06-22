@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import * as usersService from '../services/users.service.js'
 
 export const validateFollow = async (req, res, next) => {
@@ -7,15 +8,20 @@ export const validateFollow = async (req, res, next) => {
     return res.status(400).json({ error: 'No puedes seguirte a ti mismo' })
   }
 
-  const follower = await usersService.getById(followerId)
-  if (!follower) {
-    return res.status(404).json({ error: `Usuario con id ${followerId} no encontrado` })
+  if (
+    !mongoose.Types.ObjectId.isValid(followerId) ||
+    !mongoose.Types.ObjectId.isValid(followedId)
+  ) {
+    return res.status(404).json({ error: 'Usuario no encontrado' })
   }
 
+  const follower = await usersService.getById(followerId)
+  if (!follower)
+    return res.status(404).json({ error: `Usuario con id ${followerId} no encontrado` })
+
   const followed = await usersService.getById(followedId)
-  if (!followed) {
+  if (!followed)
     return res.status(404).json({ error: `Usuario con id ${followedId} no encontrado` })
-  }
 
   req.follower = follower
   req.followed = followed
