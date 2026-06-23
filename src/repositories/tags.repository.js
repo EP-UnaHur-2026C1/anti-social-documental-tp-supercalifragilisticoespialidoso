@@ -6,7 +6,7 @@ export const findById = async (id) => {
   const tag = await Tag.findById(id)
   if (!tag) return null
   const posts = await Post.find({ tags: id }).populate('userId', '_id nickName')
-  return { ...tag.toObject(), posts }
+  return { ...tag.toJSON(), posts }
 }
 
 export const findByIdSimple = (id) => Tag.findById(id)

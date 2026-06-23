@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { Post, Comment } from '../models/index.js'
 
 export const findAll = () => Post.find().populate('userId', '_id nickName').populate('tags')
@@ -13,7 +14,7 @@ export const findByIdWithRelations = async (id, commentCutoff) => {
     createdAt: { $gte: commentCutoff },
   }).populate('userId', '_id nickName')
 
-  return { ...post.toObject(), comments }
+  return { ...post.toJSON(), comments }
 }
 
 export const create = (data) => Post.create(data)
@@ -25,10 +26,14 @@ export const update = (post, data) => {
 
 export const remove = (post) => post.deleteOne()
 
-export const addImage = (postId, url) =>
-  Post.findByIdAndUpdate(postId, { $push: { images: { url } } }, { new: true })
+export const addImage = async (postId, url) => {
+  const post = await Post.findByIdAndUpdate(postId, { $push: { images: { url } } }, { new: true })
+  const image = post.images[post.images.length - 1]
+  return { id: image._id.toString(), _id: image._id, url: image.url, postId: postId.toString() }
+}
 
 export const findImage = async (imageId, postId) => {
+  if (!mongoose.Types.ObjectId.isValid(imageId)) return null
   const post = await Post.findById(postId)
   if (!post) return null
   const image = post.images.id(imageId)
