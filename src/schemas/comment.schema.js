@@ -5,13 +5,13 @@ export const commentSchema = Joi.object({
     'any.required': 'text es requerido',
     'string.empty': 'text no puede estar vacío',
   }),
-  postId: Joi.number().integer().positive().required().messages({
+  postId: Joi.string().min(1).required().messages({
     'any.required': 'postId es requerido',
-    'number.base': 'postId debe ser un número entero positivo',
+    'string.empty': 'postId no puede estar vacío',
   }),
-  userId: Joi.number().integer().positive().required().messages({
+  userId: Joi.string().min(1).required().messages({
     'any.required': 'userId es requerido',
-    'number.base': 'userId debe ser un número entero positivo',
+    'string.empty': 'userId no puede estar vacío',
   }),
 })
   .unknown(false)

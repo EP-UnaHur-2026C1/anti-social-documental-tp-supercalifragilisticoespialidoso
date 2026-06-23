@@ -1,31 +1,21 @@
-import { Op } from 'sequelize'
-import { Post, User, PostImage, Comment, Tag } from '../models/index.js'
+import mongoose from 'mongoose'
+import { Post, Comment } from '../models/index.js'
 
-export const findAll = () =>
-  Post.findAll({
-    include: [
-      { model: User, as: 'user', attributes: ['id', 'nickName'] },
-      { model: Tag, as: 'tags' },
-    ],
-  })
+export const findAll = () => Post.find().populate('userId', '_id nickName').populate('tags')
 
-export const findById = (id) => Post.findByPk(id)
+export const findById = (id) => Post.findById(id)
 
-export const findByIdWithRelations = (id, commentCutoff) =>
-  Post.findByPk(id, {
-    include: [
-      { model: User, as: 'user', attributes: ['id', 'nickName'] },
-      { model: PostImage, as: 'images' },
-      { model: Tag, as: 'tags' },
-      {
-        model: Comment,
-        as: 'comments',
-        where: { createdAt: { [Op.gte]: commentCutoff } },
-        required: false,
-        include: [{ model: User, as: 'user', attributes: ['id', 'nickName'] }],
-      },
-    ],
-  })
+export const findByIdWithRelations = async (id, commentCutoff) => {
+  const post = await Post.findById(id).populate('userId', '_id nickName').populate('tags')
+  if (!post) return null
+
+  const comments = await Comment.find({
+    postId: id,
+    createdAt: { $gte: commentCutoff },
+  }).populate('userId', '_id nickName')
+
+  return { ...post.toJSON(), comments }
+}
 
 export const create = (data) => Post.create(data)
 
@@ -34,14 +24,33 @@ export const update = (post, data) => {
   return post.save()
 }
 
-export const remove = (post) => post.destroy()
+export const remove = (post) => post.deleteOne()
 
-export const addImage = (postId, url) => PostImage.create({ url, postId })
+export const addImage = async (postId, url) => {
+  const post = await Post.findByIdAndUpdate(postId, { $push: { images: { url } } }, { new: true })
+  const image = post.images[post.images.length - 1]
+  return { id: image._id.toString(), _id: image._id, url: image.url, postId: postId.toString() }
+}
 
-export const findImage = (imageId, postId) => PostImage.findOne({ where: { id: imageId, postId } })
+export const findImage = async (imageId, postId) => {
+  if (!mongoose.Types.ObjectId.isValid(imageId)) return null
+  const post = await Post.findById(postId)
+  if (!post) return null
+  const image = post.images.id(imageId)
+  return image ? { post, image } : null
+}
 
-export const removeImage = (image) => image.destroy()
+export const removeImage = async ({ post, image }) => {
+  post.images.pull(image._id)
+  return await post.save()
+}
 
-export const addTag = (post, tag) => post.addTags(tag)
+export const addTag = (post, tag) => {
+  if (!post.tags.map(String).includes(String(tag._id))) post.tags.push(tag._id)
+  return post.save()
+}
 
-export const removeTag = (post, tag) => post.removeTags(tag)
+export const removeTag = (post, tag) => {
+  post.tags.pull(tag._id)
+  return post.save()
+}

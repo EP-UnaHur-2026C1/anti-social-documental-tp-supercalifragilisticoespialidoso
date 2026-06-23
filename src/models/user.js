@@ -1,42 +1,15 @@
-export const userModel = (sequelize, DataTypes) => {
-  const User = sequelize.define(
-    'User',
-    {
-      nickName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: { isEmail: true },
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-    },
-    { tableName: 'Users', timestamps: true },
-  )
+import mongoose from 'mongoose'
 
-  User.associate = (models) => {
-    User.hasMany(models.Post, { foreignKey: 'userId', as: 'posts' })
-    User.hasMany(models.Comment, { foreignKey: 'userId', as: 'comments' })
-    User.belongsToMany(User, {
-      through: 'UserFollower',
-      as: 'followers',
-      foreignKey: 'followedId',
-      otherKey: 'followerId',
-    })
-    User.belongsToMany(User, {
-      through: 'UserFollower',
-      as: 'following',
-      foreignKey: 'followerId',
-      otherKey: 'followedId',
-    })
-  }
+const userSchema = new mongoose.Schema(
+  {
+    nickName: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+  },
+  { timestamps: true },
+)
 
-  return User
-}
+export const User = mongoose.model('User', userSchema)

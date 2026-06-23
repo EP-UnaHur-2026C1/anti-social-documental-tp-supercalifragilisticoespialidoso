@@ -26,13 +26,12 @@ app.use('/', commentsRoute)
 app.use('/', tagsRoute)
 
 app.use((err, req, res, next) => {
-  if (err.name === 'SequelizeUniqueConstraintError') {
-    return res
-      .status(409)
-      .json({ error: 'El valor ya existe', campo: Object.keys(err.fields).join(', ') })
+  if (err.code === 11000) {
+    const campo = Object.keys(err.keyPattern).join(', ')
+    return res.status(409).json({ error: 'El valor ya existe', campo })
   }
-  res.status(err.status ?? 500).json({ error: err.message })
 
+  res.status(err.status ?? 500).json({ error: err.message })
   next()
 })
 

@@ -1,32 +1,13 @@
-export const commentModel = (sequelize, DataTypes) => {
-  const Comment = sequelize.define(
-    'Comment',
-    {
-      text: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      isVisible: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      postId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-    },
-    { tableName: 'Comments', timestamps: true },
-  )
+import mongoose from 'mongoose'
 
-  Comment.associate = (models) => {
-    Comment.belongsTo(models.Post, { foreignKey: 'postId', as: 'post' })
-    Comment.belongsTo(models.User, { foreignKey: 'userId', as: 'user' })
-  }
+const commentSchema = new mongoose.Schema(
+  {
+    text: { type: String, required: true },
+    isVisible: { type: Boolean, default: true },
+    postId: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  },
+  { timestamps: true },
+)
 
-  return Comment
-}
+export const Comment = mongoose.model('Comment', commentSchema)

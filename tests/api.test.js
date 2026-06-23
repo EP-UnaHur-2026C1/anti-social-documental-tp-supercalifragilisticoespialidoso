@@ -1,14 +1,20 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import request from 'supertest'
+import mongoose from 'mongoose'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import { app } from '../src/app.js'
-import { sequelize } from '../src/models/index.js'
+import { Comment } from '../src/models/index.js'
+
+let mongoServer
 
 beforeAll(async () => {
-  await sequelize.sync({ force: true })
+  mongoServer = await MongoMemoryServer.create()
+  await mongoose.connect(mongoServer.getUri())
 })
 
 afterAll(async () => {
-  await sequelize.close()
+  await mongoose.connection.close()
+  await mongoServer.stop()
 })
 
 // ─────────────────────────────────────────────────────────
@@ -175,7 +181,7 @@ describe('Posts - Imágenes', () => {
 
     expect(res.status).toBe(201)
     expect(res.body.url).toBe('https://example.com/foto.jpg')
-    expect(Number(res.body.postId)).toBe(postId)
+    expect(res.body.postId).toBe(postId)
   })
 
   it('el GET /posts/:id muestra las imágenes asociadas', async () => {
@@ -364,8 +370,9 @@ describe('Comments - Filtro por COMMENT_MONTHS', () => {
 
     const oldDate = new Date()
     oldDate.setMonth(oldDate.getMonth() - 8)
-    await sequelize.query(
-      `UPDATE Comments SET createdAt = '${oldDate.toISOString()}' WHERE id = ${c.id}`,
+    await Comment.collection.updateOne(
+      { _id: new mongoose.Types.ObjectId(c.id) },
+      { $set: { createdAt: oldDate } },
     )
 
     const res = await request(app).get(`/posts/${postId}`)
@@ -381,8 +388,9 @@ describe('Comments - Filtro por COMMENT_MONTHS', () => {
 
     const twoMonthsAgo = new Date()
     twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2)
-    await sequelize.query(
-      `UPDATE Comments SET createdAt = '${twoMonthsAgo.toISOString()}' WHERE id = ${c.id}`,
+    await Comment.collection.updateOne(
+      { _id: new mongoose.Types.ObjectId(c.id) },
+      { $set: { createdAt: twoMonthsAgo } },
     )
 
     const res = await request(app).get(`/posts/${postId}`)

@@ -5,9 +5,9 @@ export const postSchema = Joi.object({
     'any.required': 'description es requerida',
     'string.empty': 'description no puede estar vacía',
   }),
-  userId: Joi.number().integer().positive().required().messages({
+  userId: Joi.string().min(1).required().messages({
     'any.required': 'userId es requerido',
-    'number.base': 'userId debe ser un número entero positivo',
+    'number.base': 'userId debe ser string',
   }),
 })
   .unknown(false)

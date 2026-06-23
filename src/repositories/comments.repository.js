@@ -1,21 +1,12 @@
-import { Comment, User, Post } from '../models/index.js'
+import { Comment } from '../models/index.js'
 
 export const findAll = () =>
-  Comment.findAll({
-    where: { isVisible: true },
-    include: [
-      { model: User, as: 'user', attributes: ['id', 'nickName'] },
-      { model: Post, as: 'post', attributes: ['id', 'description'] },
-    ],
-  })
+  Comment.find({ isVisible: true })
+    .populate('userId', '_id nickName')
+    .populate('postId', '_id description')
 
 export const findById = (id) =>
-  Comment.findByPk(id, {
-    include: [
-      { model: User, as: 'user', attributes: ['id', 'nickName'] },
-      { model: Post, as: 'post', attributes: ['id', 'description'] },
-    ],
-  })
+  Comment.findById(id).populate('userId', '_id nickName').populate('postId', '_id description')
 
 export const create = (data) => Comment.create(data)
 
@@ -24,4 +15,4 @@ export const update = (comment, data) => {
   return comment.save()
 }
 
-export const remove = (comment) => comment.destroy()
+export const remove = (comment) => comment.deleteOne()
