@@ -1,11 +1,10 @@
-const cloudinary = require('../config/cloudinary')
-const streamifier = require('streamifier')
-const { extractPublicId } = require('cloudinary-build-url')
+import { cloudinary } from '../config/cloudinary.js'
+import streamifier from 'streamifier'
 
-const { optimizeImage } = require('./sharp.service')
+import { optimizeImage } from './sharp.service.js'
 
-const uploadImage = async (file) => {
-  if (!file || !file.buffer) {
+export const uploadImage = async (file) => {
+  if (!file?.buffer) {
     throw new Error('File missing')
   }
 
@@ -14,7 +13,8 @@ const uploadImage = async (file) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream((error, result) => {
       if (error) {
-        return reject(error)
+        reject(error)
+        return
       }
 
       resolve(result)
@@ -22,25 +22,4 @@ const uploadImage = async (file) => {
 
     streamifier.createReadStream(optimizedBuffer).pipe(uploadStream)
   })
-}
-
-const deleteImageByURL = async (imageURL) => {
-  const publicId = extractPublicId(imageURL)
-
-  if (!publicId) {
-    throw new Error('Incorrect image URL')
-  }
-
-  const { result } = await cloudinary.uploader.destroy(publicId)
-
-  if (result === 'not found') {
-    throw new Error('Image not found')
-  }
-
-  return result
-}
-
-module.exports = {
-  uploadImage,
-  deleteImageByURL,
 }

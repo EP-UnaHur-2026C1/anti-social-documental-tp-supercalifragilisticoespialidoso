@@ -8,6 +8,7 @@ import { router as usersRoute } from './routes/users.route.js'
 import { router as postsRoute } from './routes/posts.route.js'
 import { router as commentsRoute } from './routes/comments.route.js'
 import { router as tagsRoute } from './routes/tags.route.js'
+import { router as cloudinaryRoute } from './routes/cloudinary.route.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const swaggerYamlPath = path.join(__dirname, '..', 'swagger.yaml')
@@ -24,6 +25,7 @@ app.use('/', usersRoute)
 app.use('/', postsRoute)
 app.use('/', commentsRoute)
 app.use('/', tagsRoute)
+app.use('/', cloudinaryRoute)
 
 app.use((err, req, res, next) => {
   if (err.code === 11000) {
