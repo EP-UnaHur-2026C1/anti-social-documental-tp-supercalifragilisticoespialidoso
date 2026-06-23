@@ -1,0 +1,40 @@
+src/models/index.js
+  s_909670e9773b85::t_2f123a8e9e4209 7-8
+src/repositories/posts.repository.js
+  s_909670e9773b85::t_a76c4e231ea236 1
+  s_909670e9773b85::t_0432966b5ed5df 29-33,36
+  s_909670e9773b85::t_ba1fe5b2d0d5ff 17
+src/repositories/tags.repository.js
+  s_909670e9773b85::t_f1e00d038f2e7c 9
+package.json
+  h_a5ee0ed7d5d05d 45-46
+src/schemas/comment.schema.js
+  s_909670e9773b85::t_babbcff5b1f523 8,10,12,14
+tests/api.test.js
+  s_909670e9773b85::t_05c50008858f5a 391-393
+  s_909670e9773b85::t_96ca0eced47c9c 3,6,16
+  s_909670e9773b85::t_ecb981920ad862 373-375
+  s_909670e9773b85::t_d9f2b4900c24bd 184
+  s_909670e9773b85::t_c135860c2fe4a3 4,8,11-12,17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "1673ea9986f9b40fca229692d63baf30d8df3be3",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_909670e9773b85": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2720a75e-1268-4777-8d84-43a254491ec6",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
