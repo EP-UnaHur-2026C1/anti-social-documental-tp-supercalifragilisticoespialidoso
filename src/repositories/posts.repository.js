@@ -3,7 +3,11 @@ import { Post, Comment, User } from '../models/index.js'
 
 export const findAll = async (skip, limit) => {
   const [items, total] = await Promise.all([
-    Post.find().populate('userId', '_id nickName').populate('tags').skip(skip).limit(limit),
+    Post.find()
+      .populate('author', '_id nickName name profileImage')
+      .populate('tags')
+      .skip(skip)
+      .limit(limit),
     Post.countDocuments(),
   ])
 
@@ -13,21 +17,23 @@ export const findAll = async (skip, limit) => {
 export const findById = (id) => Post.findById(id)
 
 export const findByIdWithRelations = async (id, commentCutoff) => {
-  const post = await Post.findById(id).populate('userId', '_id nickName').populate('tags')
+  const post = await Post.findById(id)
+    .populate('author', '_id nickName name profileImage')
+    .populate('tags')
   if (!post) return null
 
   const comments = await Comment.find({
     postId: id,
     createdAt: { $gte: commentCutoff },
-  }).populate('userId', '_id nickName')
+  }).populate('userId', '_id nickName name profileImage')
 
   return { ...post.toJSON(), comments }
 }
 
 export const create = async (data) => {
   const post = await Post.create(data)
-  await User.findByIdAndUpdate(data.userId, { $push: { posts: post._id } })
-  return post
+  await User.findByIdAndUpdate(data.author, { $push: { posts: post._id } })
+  return post.populate('author', '_id nickName name profileImage')
 }
 
 export const update = (post, data) => {
@@ -36,7 +42,7 @@ export const update = (post, data) => {
 }
 
 export const remove = async (post) => {
-  await User.findByIdAndUpdate(post.userId, { $pull: { posts: post._id } })
+  await User.findByIdAndUpdate(post.author, { $pull: { posts: post._id } })
   return post.deleteOne()
 }
 
