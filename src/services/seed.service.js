@@ -24,8 +24,12 @@ export const generateDummyData = async () => {
     description: 'Mi primer post con datos dummy',
     userId: user._id,
     images: [
-      { url: 'https://via.placeholder.com/600x400?text=Demo+Image+1' },
-      { url: 'https://via.placeholder.com/600x400?text=Demo+Image+2' },
+      {
+        url: 'https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?q=100&w=687&auto=format',
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?q=100&w=687&auto=format',
+      },
     ],
     tags: [tags[0]._id, tags[1]._id],
   })
