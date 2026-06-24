@@ -1,0 +1,26 @@
+src/controllers/seed.controller.js
+  s_f8c4e5036d64f5::t_5816460be51bf6 1,5-6
+src/controllers/cleanup.controller.js
+  s_f8c4e5036d64f5::t_5a832272812b9e 1,5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "33d965bed24d66330e7a00589206dfbec8bf6754",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_f8c4e5036d64f5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ecd1bff7-0bb3-4510-8af9-40a378b53293",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
