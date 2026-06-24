@@ -1,0 +1,85 @@
+package.json
+  h_a5ee0ed7d5d05d 50
+  s_fe813895880200::t_a714245d105c8f 42
+src/routes/users.route.js
+  s_fe813895880200::t_faeb96779b879a 4,13
+src/models/user.js
+  s_fe813895880200::t_ac746fba37b01a 11
+  s_fe813895880200::t_0d3ea74c53f377 8
+  s_fe813895880200::t_c27f36d83e461c 9-10,12-16
+src/controllers/cleanup.controller.js
+  s_fe813895880200::t_2d00a1559e4ea3 1-13
+src/repositories/users.repository.js
+  s_fe813895880200::t_833134d68eff7d 7-8
+src/controllers/seed.controller.js
+  s_fe813895880200::t_312b21ce20d2c6 1-79
+src/routes/seed.route.js
+  s_fe813895880200::t_6830fa3dc368f6 1-8
+src/controllers/auth.controller.js
+  s_fe813895880200::t_f0a5c4a80171ce 1-20
+src/services/auth.service.js
+  s_fe813895880200::t_50952e529ef506 1-29
+src/models/post.js
+  s_fe813895880200::t_a5a0a29d3d9133 11-18
+src/routes/cleanup.route.js
+  s_fe813895880200::t_8dbfb92a3e0c85 1-8
+src/app.js
+  s_fe813895880200::t_4d82fe553b103f 33
+  s_fe813895880200::t_c3ff26a33d96f3 38-44
+  s_fe813895880200::t_86c881b30f850d 7
+  s_fe813895880200::t_ba38857c92ddec 27
+  s_fe813895880200::t_a1de6bc28b03b9 34
+  s_fe813895880200::t_c1664928d1e9c4 14
+  s_fe813895880200::t_aba618d277a098 13
+postman_collection.json
+  s_fe813895880200::t_746ec20d165b83 12-14,40
+  s_fe813895880200::t_562ba5f743c277 2,6-10,15,18-22,24-27,34-38,43-47,49-50,52,55-56,59,61,64-66,68-73,77,81-82,87-94,97-98,100,102-103,108-112,114-115,118-119,121-128,130-131,134-136,140-144,146-147,150-151,153-154,156-157
+  h_a5ee0ed7d5d05d 5,11,23,30,33,39,48,51,60,76,79-80,86,101,106-107,113,129,132-133,139,145,152,155
+  s_fe813895880200::t_95cd130f15bfcf 31-32,67,120
+  s_fe813895880200::t_0acf3e5fbff81b 148-149
+src/routes/auth.route.js
+  s_fe813895880200::t_75e952f0933e60 1-11
+src/schemas/post.schema.js
+  s_fe813895880200::t_fc16ca6e318417 12-26
+src/schemas/user.schema.js
+  s_fe813895880200::t_87805a00922fdb 61-66
+  s_fe813895880200::t_5adfaa62d6c278 20-45
+  s_fe813895880200::t_af1f3e60c43734 46-60
+swagger.yaml
+  s_fe813895880200::t_2a7632c876d199 1095-1102
+  s_fe813895880200::t_a2259ddfbb6f5c 32-105
+  s_fe813895880200::t_73fbfd6549555f 1157,1166-1171
+  s_fe813895880200::t_e35684e9642160 1005
+  s_fe813895880200::t_f30904ab74a914 900-923
+  s_fe813895880200::t_2026c5b3c8dc6f 28-29
+  s_fe813895880200::t_1c81692e5f5893 1002-1004,1006-1008
+  s_fe813895880200::t_964338d98264eb 1034-1059,1068,1075,1091-1094,1103-1116
+  s_fe813895880200::t_a62f717b3e3421 18-19
+  s_fe813895880200::t_e61647ca03055d 1060-1067
+  s_fe813895880200::t_75182d08802e9a 924-974
+tests/api.test.js
+  s_fe813895880200::t_849db116638f43 111-115,146
+  s_fe813895880200::t_a6bc8ea1df8793 145
+  s_fe813895880200::t_f9ab0afe9b4d32 33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "8027ecddf392024f9b4b946e42389486bf1831a8",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_fe813895880200": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6d9b9905-53d5-4fea-bb45-27cc1b3b2e85",
+        "model": "claude-haiku-4-5-20251001"
+      },
+      "human_author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
