@@ -1,7 +1,14 @@
 import mongoose from 'mongoose'
 import { Post, Comment } from '../models/index.js'
 
-export const findAll = () => Post.find().populate('userId', '_id nickName').populate('tags')
+export const findAll = async (skip, limit) => {
+  const [items, total] = await Promise.all([
+    Post.find().populate('userId', '_id nickName').populate('tags').skip(skip).limit(limit),
+    Post.countDocuments(),
+  ])
+
+  return { items, total }
+}
 
 export const findById = (id) => Post.findById(id)
 

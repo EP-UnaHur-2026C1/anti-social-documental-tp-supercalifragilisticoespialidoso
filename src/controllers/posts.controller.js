@@ -7,16 +7,30 @@ const getCommentCutoff = () => {
   cutoff.setMonth(cutoff.getMonth() - months)
   return cutoff
 }
-
 export const getAll = async (req, res, next) => {
   try {
-    const items = await postsService.getAll()
-    res.json(items)
+    let page = parseInt(req.query.page) || 1
+    let limit = parseInt(req.query.limit) || 10
+
+    if (page < 1) page = 1
+    if (limit < 1) limit = 10
+    if (limit > 50) limit = 50
+
+    const { items, total } = await postsService.getAll(page, limit)
+
+    res.json({
+      data: items,
+      pagination: {
+        totalItems: total,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+        limit,
+      },
+    })
   } catch (err) {
     next(err)
   }
 }
-
 export const getById = async (req, res, next) => {
   try {
     const cutoff = getCommentCutoff()
