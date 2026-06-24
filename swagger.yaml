@@ -187,7 +187,7 @@ paths:
       tags:
         - Users
       summary: Actualizar un usuario
-      description: Actualiza los datos de un usuario existente
+      description: Actualiza los datos de un usuario existente. Acepta multipart/form-data para permitir el envío opcional de imagen de perfil.
       parameters:
         - name: id
           in: path
@@ -198,9 +198,9 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserCreate'
+              $ref: '#/components/schemas/UserUpdate'
       responses:
         '200':
           description: Usuario actualizado exitosamente
@@ -1100,6 +1100,36 @@ components:
           type: string
           maxLength: 500
           example: Desarrollador y entusiasta de tecnología
+
+    UserUpdate:
+      type: object
+      properties:
+        nickName:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: juan_perez
+        email:
+          type: string
+          format: email
+          example: juan@example.com
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Juan Pérez
+        password:
+          type: string
+          minLength: 6
+          example: miContraseña123
+        bio:
+          type: string
+          maxLength: 500
+          example: Desarrollador y entusiasta de tecnología
+        profileImage:
+          type: string
+          format: binary
+          description: Imagen de perfil (opcional)
 
     LoginRequest:
       type: object

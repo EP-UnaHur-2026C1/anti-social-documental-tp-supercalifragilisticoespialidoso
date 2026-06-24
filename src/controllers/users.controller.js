@@ -26,7 +26,7 @@ export const create = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    const updated = await usersService.update(req.user, req.body)
+    const updated = await usersService.update(req.user, req.body, req.file)
     res.json(updated)
   } catch (err) {
     next(err)

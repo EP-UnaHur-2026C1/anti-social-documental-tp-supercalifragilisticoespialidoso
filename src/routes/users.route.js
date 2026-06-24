@@ -1,16 +1,25 @@
 import { Router } from 'express'
+import multer from 'multer'
 import * as usersController from '../controllers/users.controller.js'
 import { schemaValidator } from '../middlewares/schemaValidator.middleware.js'
 import { userSchema, updateUserSchema } from '../schemas/user.schema.js'
 import { validateUserId } from '../middlewares/validateUserId.middleware.js'
 import { validateFollow } from '../middlewares/validateFollow.middleware.js'
 
+const upload = multer({ storage: multer.memoryStorage() })
+
 const router = Router()
 
 router.get('/users', usersController.getAll)
 router.get('/users/:id', validateUserId, usersController.getById)
 router.post('/users', schemaValidator(userSchema), usersController.create)
-router.put('/users/:id', validateUserId, schemaValidator(updateUserSchema), usersController.update)
+router.put(
+  '/users/:id',
+  validateUserId,
+  upload.single('profileImage'),
+  schemaValidator(updateUserSchema),
+  usersController.update,
+)
 router.delete('/users/:id', validateUserId, usersController.remove)
 
 router.get('/users/:id/followers', validateUserId, usersController.getFollowers)

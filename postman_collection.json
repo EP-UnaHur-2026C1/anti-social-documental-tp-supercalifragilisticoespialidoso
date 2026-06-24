@@ -214,15 +214,33 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"nickName\": \"anti_user_a_upd_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_a_upd_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario A Actualizado\"\n}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nickName",
+                  "value": "anti_user_a_upd_{{$timestamp}}_{{$randomInt}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "anti_user_a_upd_{{$timestamp}}_{{$randomInt}}@example.com",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Usuario A Actualizado",
+                  "type": "text"
+                },
+                {
+                  "key": "profileImage",
+                  "type": "file",
+                  "src": "",
+                  "description": "Imagen de perfil (opcional)",
+                  "disabled": true
+                }
+              ]
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user1Id}}",
