@@ -1,0 +1,35 @@
+postman_collection.json
+  s_f8c4e5036d64f5::t_1366e31eac4229 217,219-243
+src/controllers/users.controller.js
+  s_f8c4e5036d64f5::t_6cbd2c0233492a 29
+src/services/users.service.js
+  s_f8c4e5036d64f5::t_4cc3781ae04573 2,14-15
+  s_f8c4e5036d64f5::t_c807f08074ea00 10-13,16-19
+src/routes/users.route.js
+  s_f8c4e5036d64f5::t_5ba63abe3d7369 2
+  s_f8c4e5036d64f5::t_fac81966609958 9-10,16
+swagger.yaml
+  s_f8c4e5036d64f5::t_a5a989eb7b3a25 1104-1133
+  s_f8c4e5036d64f5::t_873221911b73f8 190,201,203
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "96d75a30e4218706e0030de1ba845b85f36071d1",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_f8c4e5036d64f5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ecd1bff7-0bb3-4510-8af9-40a378b53293",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
