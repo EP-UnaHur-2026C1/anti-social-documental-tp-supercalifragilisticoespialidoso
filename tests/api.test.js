@@ -50,7 +50,7 @@ describe('Users - CRUD', () => {
     expect(res.body).toMatchObject({
       nickName: 'juan_perez',
       email: 'juan@test.com',
-      prophile_picture_url: 'https://example.com/avatar.png',
+      profile_picture_url: 'https://example.com/avatar.png',
     })
     expect(res.body.id).toBeDefined()
   })
@@ -67,7 +67,7 @@ describe('Users - CRUD', () => {
       nickName: 'sin_imagen',
       email: 'sin@test.com',
     })
-    expect(res.body.prophile_picture_url).toBe('')
+    expect(res.body.profile_picture_url).toBe('')
     expect(res.body.id).toBeDefined()
   })
 
@@ -562,6 +562,7 @@ describe('Validaciones Joi', () => {
     const res = await request(app)
       .post(`/posts/${post.id}/images`)
       .send({ url: 'esto-no-es-una-url' })
+
     expect(res.status).toBe(400)
   })
 

@@ -1,5 +1,4 @@
 import * as usersService from '../services/users.service.js'
-import { uploadImage } from '../services/cloudinary.service.js'
 
 export const getAll = async (req, res, next) => {
   try {
@@ -18,14 +17,7 @@ export const getFollowing = (req, res) => res.json(req.user.following)
 
 export const create = async (req, res, next) => {
   try {
-    const userData = { ...req.body }
-
-    if (req.file) {
-      const result = await uploadImage(req.file)
-      userData.prophile_picture_url = result.secure_url
-    }
-
-    const item = await usersService.create(userData)
+    const item = await usersService.create(req.body, req.file)
     res.status(201).json(item)
   } catch (err) {
     next(err)
