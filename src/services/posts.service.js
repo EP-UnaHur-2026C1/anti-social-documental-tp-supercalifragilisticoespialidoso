@@ -1,4 +1,5 @@
 import * as postsRepo from '../repositories/posts.repository.js'
+import { uploadImage } from './cloudinary.service.js'
 
 export const getAll = (page, limit) => {
   const skip = (page - 1) * limit
@@ -7,7 +8,25 @@ export const getAll = (page, limit) => {
 export const getById = (id, commentCutoff) =>
   commentCutoff ? postsRepo.findByIdWithRelations(id, commentCutoff) : postsRepo.findById(id)
 
-export const create = (data) => postsRepo.create(data)
+export const create = async (data, file) => {
+  const createData = {
+    description: data.description,
+    userId: data.userId,
+  }
+
+  if (file) {
+    const result = await uploadImage(file)
+    createData.images = [{ url: result.secure_url }]
+  } else if (data.images) {
+    createData.images = data.images
+  } else {
+    const error = new Error('La publicación debe tener al menos una imagen')
+    error.status = 400
+    throw error
+  }
+
+  return postsRepo.create(createData)
+}
 
 export const update = (post, data) => postsRepo.update(post, data)
 

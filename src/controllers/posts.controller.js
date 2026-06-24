@@ -43,7 +43,7 @@ export const getById = async (req, res, next) => {
 
 export const create = async (req, res, next) => {
   try {
-    const item = await postsService.create(req.body)
+    const item = await postsService.create(req.body, req.file)
     res.status(201).json(item)
   } catch (err) {
     next(err)

@@ -1,12 +1,10 @@
 import { Router } from 'express'
-import multer from 'multer'
 import * as usersController from '../controllers/users.controller.js'
 import { schemaValidator } from '../middlewares/schemaValidator.middleware.js'
 import { userSchema, updateUserSchema } from '../schemas/user.schema.js'
 import { validateUserId } from '../middlewares/validateUserId.middleware.js'
 import { validateFollow } from '../middlewares/validateFollow.middleware.js'
-
-const upload = multer({ storage: multer.memoryStorage() })
+import { uploadProfileImage } from '../middlewares/uploadProfileImage.middleware.js'
 
 const router = Router()
 
@@ -16,7 +14,7 @@ router.post('/users', schemaValidator(userSchema), usersController.create)
 router.put(
   '/users/:id',
   validateUserId,
-  upload.single('profileImage'),
+  uploadProfileImage,
   schemaValidator(updateUserSchema),
   usersController.update,
 )

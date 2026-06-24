@@ -19,9 +19,8 @@ export const postSchema = Joi.object({
       }),
     )
     .min(1)
-    .required()
+    .optional()
     .messages({
-      'any.required': 'images es requerido',
       'array.min': 'La publicación debe tener al menos una imagen',
     }),
 })

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import * as postsController from '../controllers/posts.controller.js'
 import { schemaValidator } from '../middlewares/schemaValidator.middleware.js'
 import { validatePostId } from '../middlewares/validatePostId.middleware.js'
+import { uploadImage } from '../middlewares/uploadImage.middleware.js'
 import { postSchema, updatePostSchema } from '../schemas/post.schema.js'
 import { postImageSchema } from '../schemas/postImages.schema.js'
 
@@ -9,7 +10,7 @@ const router = Router()
 
 router.get('/posts', postsController.getAll)
 router.get('/posts/:id', validatePostId, postsController.getById)
-router.post('/posts', schemaValidator(postSchema), postsController.create)
+router.post('/posts', uploadImage, schemaValidator(postSchema), postsController.create)
 router.put('/posts/:id', validatePostId, schemaValidator(updatePostSchema), postsController.update)
 router.delete('/posts/:id', validatePostId, postsController.remove)
 
