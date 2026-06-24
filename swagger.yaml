@@ -299,6 +299,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /users/{id}/posts:
+    get:
+      tags:
+        - Users
+      summary: Obtener los posts de un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID del usuario
+      responses:
+        '200':
+          description: Lista de posts del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /users/{followerId}/follow/{followedId}:
     post:
       tags:

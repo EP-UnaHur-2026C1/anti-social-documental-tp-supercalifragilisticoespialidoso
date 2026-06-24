@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { Post, Comment } from '../models/index.js'
+import { Post, Comment, User } from '../models/index.js'
 
 export const findAll = () => Post.find().populate('userId', '_id nickName').populate('tags')
 
@@ -17,14 +17,21 @@ export const findByIdWithRelations = async (id, commentCutoff) => {
   return { ...post.toJSON(), comments }
 }
 
-export const create = (data) => Post.create(data)
+export const create = async (data) => {
+  const post = await Post.create(data)
+  await User.findByIdAndUpdate(data.userId, { $push: { posts: post._id } })
+  return post
+}
 
 export const update = (post, data) => {
   Object.assign(post, data)
   return post.save()
 }
 
-export const remove = (post) => post.deleteOne()
+export const remove = async (post) => {
+  await User.findByIdAndUpdate(post.userId, { $pull: { posts: post._id } })
+  return post.deleteOne()
+}
 
 export const addImage = async (postId, url) => {
   const post = await Post.findByIdAndUpdate(postId, { $push: { images: { url } } }, { new: true })

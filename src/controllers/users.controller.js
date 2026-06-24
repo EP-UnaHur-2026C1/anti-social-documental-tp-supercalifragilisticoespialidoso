@@ -15,6 +15,8 @@ export const getFollowers = (req, res) => res.json(req.user.followers)
 
 export const getFollowing = (req, res) => res.json(req.user.following)
 
+export const getPosts = (req, res) => res.json(req.user.posts)
+
 export const create = async (req, res, next) => {
   try {
     const item = await usersService.create(req.body)
