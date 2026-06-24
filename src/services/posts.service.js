@@ -1,7 +1,9 @@
 import * as postsRepo from '../repositories/posts.repository.js'
 
-export const getAll = () => postsRepo.findAll()
-
+export const getAll = (page, limit) => {
+  const skip = (page - 1) * limit
+  return postsRepo.findAll(skip, limit)
+}
 export const getById = (id, commentCutoff) =>
   commentCutoff ? postsRepo.findByIdWithRelations(id, commentCutoff) : postsRepo.findById(id)
 
