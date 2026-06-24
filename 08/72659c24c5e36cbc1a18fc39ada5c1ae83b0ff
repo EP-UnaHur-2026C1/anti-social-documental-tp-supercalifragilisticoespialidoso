@@ -1,0 +1,14 @@
+src/services/seed.service.js
+  h_a5ee0ed7d5d05d 10,42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "0872659c24c5e36cbc1a18fc39ada5c1ae83b0ff",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
