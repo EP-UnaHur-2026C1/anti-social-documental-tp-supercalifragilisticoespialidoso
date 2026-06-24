@@ -4,6 +4,8 @@ export const findAll = () => User.find()
 
 export const findById = (id) => User.findById(id)
 
+export const findByEmail = (email) => User.findOne({ email })
+
 export const findByIdWithRelations = (id) =>
   User.findById(id)
     .populate('posts')

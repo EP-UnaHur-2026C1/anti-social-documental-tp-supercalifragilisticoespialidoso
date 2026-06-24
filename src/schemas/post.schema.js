@@ -9,6 +9,21 @@ export const postSchema = Joi.object({
     'any.required': 'userId es requerido',
     'number.base': 'userId debe ser string',
   }),
+  images: Joi.array()
+    .items(
+      Joi.object({
+        url: Joi.string().uri().required().messages({
+          'any.required': 'URL es requerida',
+          'string.uri': 'URL debe ser válida',
+        }),
+      }),
+    )
+    .min(1)
+    .required()
+    .messages({
+      'any.required': 'images es requerido',
+      'array.min': 'La publicación debe tener al menos una imagen',
+    }),
 })
   .unknown(false)
   .messages({

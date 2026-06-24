@@ -15,6 +15,8 @@ servers:
     description: Servidor alternativo
 
 tags:
+  - name: Auth
+    description: Operaciones de autenticación
   - name: Users
     description: Operaciones de gestión de usuarios
   - name: Posts
@@ -23,8 +25,84 @@ tags:
     description: Operaciones de gestión de comentarios
   - name: Tags
     description: Operaciones de gestión de etiquetas
+  - name: Cleanup
+    description: Operaciones de limpieza de datos (desarrollo)
 
 paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Registrar un nuevo usuario
+      description: Crea una nueva cuenta de usuario con contraseña hasheada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '201':
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Datos de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: El nickName o email ya existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Iniciar sesión
+      description: Autentica un usuario con email y contraseña
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Datos de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /users:
     get:
       tags:
@@ -819,6 +897,81 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /cleanup/collections:
+    delete:
+      tags:
+        - Cleanup
+      summary: Limpiar todas las colecciones
+      description: Elimina todos los documentos de las colecciones (User, Post, Comment, Tag). Solo para desarrollo.
+      responses:
+        '200':
+          description: Colecciones eliminadas exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Todas las colecciones han sido eliminadas
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /seed:
+    post:
+      tags:
+        - Cleanup
+      summary: Generar datos dummy
+      description: Crea un conjunto de datos de prueba incluyendo usuario, posts, tags y comentarios. Solo para desarrollo.
+      responses:
+        '201':
+          description: Datos dummy creados exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Datos dummy creados exitosamente
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          nickName:
+                            type: string
+                          email:
+                            type: string
+                      post:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          description:
+                            type: string
+                          imagesCount:
+                            type: integer
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                      commentsCount:
+                        type: integer
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     UserSummary:
@@ -846,6 +999,13 @@ components:
         name:
           type: string
           example: Juan Pérez
+        profileImage:
+          type: string
+          format: uri
+          example: https://media.istockphoto.com/id/1980276924/es/vector/sin-elemento-gr%C3%A1fico-en-miniatura-de-la-foto-no-se-ha-encontrado-ninguna-imagen-o-est%C3%A1.jpg
+        bio:
+          type: string
+          example: Desarrollador y entusiasta de tecnología
         createdAt:
           type: string
           format: date-time
@@ -871,12 +1031,13 @@ components:
               items:
                 $ref: '#/components/schemas/UserSummary'
 
-    UserCreate:
+    UserRegister:
       type: object
       required:
         - nickName
         - email
         - name
+        - password
       properties:
         nickName:
           type: string
@@ -892,6 +1053,67 @@ components:
           minLength: 2
           maxLength: 100
           example: Juan Pérez
+        password:
+          type: string
+          minLength: 6
+          example: miContraseña123
+        profileImage:
+          type: string
+          format: uri
+          example: https://example.com/mi-avatar.jpg
+        bio:
+          type: string
+          maxLength: 500
+          example: Desarrollador y entusiasta de tecnología
+
+    UserCreate:
+      type: object
+      required:
+        - nickName
+        - email
+        - name
+        - password
+      properties:
+        nickName:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: juan_perez
+        email:
+          type: string
+          format: email
+          example: juan@example.com
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Juan Pérez
+        password:
+          type: string
+          minLength: 6
+          example: miContraseña123
+        profileImage:
+          type: string
+          format: uri
+          example: https://example.com/mi-avatar.jpg
+        bio:
+          type: string
+          maxLength: 500
+          example: Desarrollador y entusiasta de tecnología
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: juan@example.com
+        password:
+          type: string
+          example: miContraseña123
 
     Post:
       type: object
@@ -932,6 +1154,7 @@ components:
       required:
         - description
         - userId
+        - images
       properties:
         description:
           type: string
@@ -940,6 +1163,12 @@ components:
         userId:
           type: integer
           example: 1
+        images:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PostImageCreate'
+          description: Al menos una imagen es requerida
 
     PostUpdate:
       type: object
