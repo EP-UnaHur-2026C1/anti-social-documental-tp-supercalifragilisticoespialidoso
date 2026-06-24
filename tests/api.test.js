@@ -30,7 +30,12 @@ describe('Users - CRUD', () => {
   it('POST /users crea un usuario correctamente', async () => {
     const res = await request(app)
       .post('/users')
-      .send({ nickName: 'juan_perez', email: 'juan@test.com', name: 'Juan Perez' })
+      .send({
+        nickName: 'juan_perez',
+        email: 'juan@test.com',
+        name: 'Juan Perez',
+        password: 'pass123',
+      })
     expect(res.status).toBe(201)
     expect(res.body).toMatchObject({ nickName: 'juan_perez', email: 'juan@test.com' })
     expect(res.body.id).toBeDefined()
@@ -39,7 +44,7 @@ describe('Users - CRUD', () => {
   it('GET /users/:id devuelve el usuario con posts, followers y following', async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'maria_g', email: 'maria@test.com', name: 'Maria G' })
+      .send({ nickName: 'maria_g', email: 'maria@test.com', name: 'Maria G', password: 'pass123' })
 
     const res = await request(app).get(`/users/${user.id}`)
     expect(res.status).toBe(200)
@@ -51,7 +56,7 @@ describe('Users - CRUD', () => {
   it('PUT /users/:id actualiza el usuario', async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'upd_user', email: 'upd@test.com', name: 'Original' })
+      .send({ nickName: 'upd_user', email: 'upd@test.com', name: 'Original', password: 'pass123' })
 
     const res = await request(app)
       .put(`/users/${user.id}`)
@@ -64,7 +69,7 @@ describe('Users - CRUD', () => {
   it('DELETE /users/:id elimina el usuario y el GET devuelve 404', async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'del_user', email: 'del@test.com', name: 'A Borrar' })
+      .send({ nickName: 'del_user', email: 'del@test.com', name: 'A Borrar', password: 'pass123' })
 
     expect((await request(app).delete(`/users/${user.id}`)).status).toBe(204)
     expect((await request(app).get(`/users/${user.id}`)).status).toBe(404)
@@ -83,11 +88,11 @@ describe('Users - nickName único', () => {
   it('rechaza crear dos usuarios con el mismo nickName → 409', async () => {
     await request(app)
       .post('/users')
-      .send({ nickName: 'unique_nick', email: 'a@test.com', name: 'User A' })
+      .send({ nickName: 'unique_nick', email: 'a@test.com', name: 'User A', password: 'pass123' })
 
     const res = await request(app)
       .post('/users')
-      .send({ nickName: 'unique_nick', email: 'b@test.com', name: 'User B' })
+      .send({ nickName: 'unique_nick', email: 'b@test.com', name: 'User B', password: 'pass123' })
 
     expect(res.status).toBe(409)
   })
@@ -102,14 +107,23 @@ describe('Posts - CRUD', () => {
   beforeAll(async () => {
     const { body } = await request(app)
       .post('/users')
-      .send({ nickName: 'post_owner', email: 'powner@test.com', name: 'Post Owner' })
+      .send({
+        nickName: 'post_owner',
+        email: 'powner@test.com',
+        name: 'Post Owner',
+        password: 'pass123',
+      })
     userId = body.id
   })
 
   it('POST /posts crea un post con description obligatoria', async () => {
     const res = await request(app)
       .post('/posts')
-      .send({ description: 'Mi primera publicación', userId })
+      .send({
+        description: 'Mi primera publicación',
+        userId,
+        images: [{ url: 'https://example.com/img1.jpg' }],
+      })
     expect(res.status).toBe(201)
     expect(res.body.description).toBe('Mi primera publicación')
     expect(res.body.userId).toBe(userId)
@@ -125,7 +139,11 @@ describe('Posts - CRUD', () => {
   it('GET /posts/:id incluye images, tags y comments', async () => {
     const { body: post } = await request(app)
       .post('/posts')
-      .send({ description: 'Post con relaciones', userId })
+      .send({
+        description: 'Post con relaciones',
+        userId,
+        images: [{ url: 'https://example.com/img.jpg' }],
+      })
 
     const res = await request(app).get(`/posts/${post.id}`)
     expect(res.status).toBe(200)
@@ -140,7 +158,7 @@ describe('Posts - CRUD', () => {
   it('PUT /posts/:id actualiza la descripción', async () => {
     const { body: post } = await request(app)
       .post('/posts')
-      .send({ description: 'Original', userId })
+      .send({ description: 'Original', userId, images: [{ url: 'https://example.com/img.jpg' }] })
 
     const res = await request(app).put(`/posts/${post.id}`).send({ description: 'Actualizado' })
 
@@ -151,7 +169,7 @@ describe('Posts - CRUD', () => {
   it('DELETE /posts/:id elimina el post', async () => {
     const { body: post } = await request(app)
       .post('/posts')
-      .send({ description: 'A borrar', userId })
+      .send({ description: 'A borrar', userId, images: [{ url: 'https://example.com/img.jpg' }] })
 
     expect((await request(app).delete(`/posts/${post.id}`)).status).toBe(204)
     expect((await request(app).get(`/posts/${post.id}`)).status).toBe(404)
@@ -167,10 +185,19 @@ describe('Posts - Imágenes', () => {
   beforeAll(async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'img_owner', email: 'img@test.com', name: 'Img Owner' })
+      .send({
+        nickName: 'img_owner',
+        email: 'img@test.com',
+        name: 'Img Owner',
+        password: 'pass123',
+      })
     const { body: post } = await request(app)
       .post('/posts')
-      .send({ description: 'Post con imágenes', userId: user.id })
+      .send({
+        description: 'Post con imágenes',
+        userId: user.id,
+        images: [{ url: 'https://example.com/img.jpg' }],
+      })
     postId = post.id
   })
 
@@ -217,15 +244,28 @@ describe('Tags - CRUD y relación N:M con Posts', () => {
   beforeAll(async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'tag_owner', email: 'tag@test.com', name: 'Tag Owner' })
+      .send({
+        nickName: 'tag_owner',
+        email: 'tag@test.com',
+        name: 'Tag Owner',
+        password: 'pass123',
+      })
     userId = user.id
 
     const { body: p1 } = await request(app)
       .post('/posts')
-      .send({ description: 'Post A con tags', userId })
+      .send({
+        description: 'Post A con tags',
+        userId,
+        images: [{ url: 'https://example.com/img.jpg' }],
+      })
     const { body: p2 } = await request(app)
       .post('/posts')
-      .send({ description: 'Post B con tags', userId })
+      .send({
+        description: 'Post B con tags',
+        userId,
+        images: [{ url: 'https://example.com/img.jpg' }],
+      })
     postId1 = p1.id
     postId2 = p2.id
 
@@ -292,11 +332,20 @@ describe('Comments - CRUD', () => {
   beforeAll(async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'comment_owner', email: 'co@test.com', name: 'Comment Owner' })
+      .send({
+        nickName: 'comment_owner',
+        email: 'co@test.com',
+        name: 'Comment Owner',
+        password: 'pass123',
+      })
     userId = user.id
     const { body: post } = await request(app)
       .post('/posts')
-      .send({ description: 'Post para comentar', userId })
+      .send({
+        description: 'Post para comentar',
+        userId,
+        images: [{ url: 'https://example.com/img.jpg' }],
+      })
     postId = post.id
   })
 
@@ -348,11 +397,20 @@ describe('Comments - Filtro por COMMENT_MONTHS', () => {
   beforeAll(async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'date_owner', email: 'date@test.com', name: 'Date Owner' })
+      .send({
+        nickName: 'date_owner',
+        email: 'date@test.com',
+        name: 'Date Owner',
+        password: 'pass123',
+      })
     userId = user.id
     const { body: post } = await request(app)
       .post('/posts')
-      .send({ description: 'Post para filtro de fechas', userId })
+      .send({
+        description: 'Post para filtro de fechas',
+        userId,
+        images: [{ url: 'https://example.com/img.jpg' }],
+      })
     postId = post.id
   })
 
@@ -409,13 +467,28 @@ describe('Followers - N:M entre usuarios', () => {
   beforeAll(async () => {
     const { body: u1 } = await request(app)
       .post('/users')
-      .send({ nickName: 'follower1', email: 'f1@test.com', name: 'Follower 1' })
+      .send({
+        nickName: 'follower1',
+        email: 'f1@test.com',
+        name: 'Follower 1',
+        password: 'pass123',
+      })
     const { body: u2 } = await request(app)
       .post('/users')
-      .send({ nickName: 'follower2', email: 'f2@test.com', name: 'Follower 2' })
+      .send({
+        nickName: 'follower2',
+        email: 'f2@test.com',
+        name: 'Follower 2',
+        password: 'pass123',
+      })
     const { body: u3 } = await request(app)
       .post('/users')
-      .send({ nickName: 'follower3', email: 'f3@test.com', name: 'Follower 3' })
+      .send({
+        nickName: 'follower3',
+        email: 'f3@test.com',
+        name: 'Follower 3',
+        password: 'pass123',
+      })
     user1Id = u1.id
     user2Id = u2.id
     user3Id = u3.id
@@ -469,7 +542,9 @@ describe('Followers - N:M entre usuarios', () => {
 // ─────────────────────────────────────────────────────────
 describe('Validaciones Joi', () => {
   it('rechaza usuario sin nickName → 400 con detalle del campo', async () => {
-    const res = await request(app).post('/users').send({ email: 'a@a.com', name: 'A' })
+    const res = await request(app)
+      .post('/users')
+      .send({ email: 'a@a.com', name: 'A', password: 'pass123' })
     expect(res.status).toBe(400)
     expect(res.body.errores.some((e) => e.atributo === 'nickName')).toBe(true)
   })
@@ -477,14 +552,14 @@ describe('Validaciones Joi', () => {
   it('rechaza usuario con email inválido', async () => {
     const res = await request(app)
       .post('/users')
-      .send({ nickName: 'valid_nick', email: 'no-es-email', name: 'A' })
+      .send({ nickName: 'valid_nick', email: 'no-es-email', name: 'A', password: 'pass123' })
     expect(res.status).toBe(400)
   })
 
   it('rechaza nickName menor a 3 caracteres', async () => {
     const res = await request(app)
       .post('/users')
-      .send({ nickName: 'ab', email: 'a@a.com', name: 'A' })
+      .send({ nickName: 'ab', email: 'a@a.com', name: 'A', password: 'pass123' })
     expect(res.status).toBe(400)
   })
 
@@ -503,10 +578,19 @@ describe('Validaciones Joi', () => {
   it('rechaza imagen con URL inválida', async () => {
     const { body: user } = await request(app)
       .post('/users')
-      .send({ nickName: 'val_img_user', email: 'vi@test.com', name: 'Val Img' })
+      .send({
+        nickName: 'val_img_user',
+        email: 'vi@test.com',
+        name: 'Val Img',
+        password: 'pass123',
+      })
     const { body: post } = await request(app)
       .post('/posts')
-      .send({ description: 'Post para validar imagen', userId: user.id })
+      .send({
+        description: 'Post para validar imagen',
+        userId: user.id,
+        images: [{ url: 'https://example.com/img.jpg' }],
+      })
 
     const res = await request(app)
       .post(`/posts/${post.id}/images`)

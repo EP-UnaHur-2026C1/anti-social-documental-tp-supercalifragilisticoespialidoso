@@ -7,6 +7,80 @@
   },
   "item": [
     {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set(\"userId\", body.user.id);",
+                  "pm.collectionVariables.set(\"userEmail\", body.user.email);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nickName\":\"test_user_{{$timestamp}}_{{$randomInt}}\",\"email\":\"test_user_{{$timestamp}}_{{$randomInt}}@example.com\",\"name\":\"Test User\",\"password\":\"testPassword123\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Retorna usuario\", () => pm.expect(body.user).to.exist);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{userEmail}}\",\"password\":\"testPassword123\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Users",
       "item": [
         {
@@ -26,7 +100,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"nickName\": \"anti_user_a_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_a_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario A\"\n}"
@@ -55,7 +134,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"nickName\": \"anti_user_b_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_b_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario B\"\n}"
@@ -130,10 +214,33 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [],
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"nickName\": \"anti_user_a_upd_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_a_upd_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario A Actualizado\"\n}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nickName",
+                  "value": "anti_user_a_upd_{{$timestamp}}_{{$randomInt}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "anti_user_a_upd_{{$timestamp}}_{{$randomInt}}@example.com",
+                  "type": "text"
+                },
+                {
+                  "key": "name",
+                  "value": "Usuario A Actualizado",
+                  "type": "text"
+                },
+                {
+                  "key": "profileImage",
+                  "type": "file",
+                  "src": "",
+                  "description": "Imagen de perfil (opcional)",
+                  "disabled": true
+                }
+              ]
             },
             "url": {
               "raw": "{{baseUrl}}/users/{{user1Id}}",
@@ -253,7 +360,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"tag-{{$timestamp}}-{{$randomInt}}\"\n}"
@@ -323,7 +435,12 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"tag-updated-{{$timestamp}}-{{$randomInt}}\"\n}"
@@ -357,7 +474,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"description\": \"Post de prueba {{$timestamp}}\",\n  \"userId\": {{user1Id}}\n}"
@@ -432,7 +554,12 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"description\": \"Post actualizado {{$timestamp}}\"\n}"
@@ -461,7 +588,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"url\": \"https://example.com/images/anti-social-{{$timestamp}}.jpg\"\n}"
@@ -558,7 +690,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"text\": \"Comentario de prueba {{$timestamp}}\",\n  \"userId\": {{user2Id}},\n  \"postId\": {{postId}}\n}"
@@ -625,7 +762,12 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"text\": \"Comentario actualizado {{$timestamp}}\"\n}"
@@ -744,6 +886,48 @@
               "raw": "{{baseUrl}}/users/{{user1Id}}",
               "host": ["{{baseUrl}}"],
               "path": ["users", "{{user1Id}}"]
+            }
+          }
+        },
+        {
+          "name": "Limpiar todas las colecciones",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status 200\", () => pm.response.to.have.status(200));"],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cleanup/collections",
+              "host": ["{{baseUrl}}"],
+              "path": ["cleanup", "collections"]
+            }
+          }
+        },
+        {
+          "name": "Generar datos dummy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status 201\", () => pm.response.to.have.status(201));"],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/seed",
+              "host": ["{{baseUrl}}"],
+              "path": ["seed"]
             }
           }
         }
