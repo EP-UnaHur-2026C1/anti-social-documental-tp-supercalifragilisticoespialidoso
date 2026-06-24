@@ -7,28 +7,6 @@ const getCommentCutoff = () => {
   cutoff.setMonth(cutoff.getMonth() - months)
   return cutoff
 }
-
-// export const getAll = async (req, res, next) => {
-//   try {
-//     const page = parseInt(req.query.page) || 1;
-//     const limit = parseInt(req.query.limit) || 10;
-//
-//     const { items, total } = await postsService.getAll(page, limit);
-//
-//     res.json({
-//       data: items,
-//       pagination: {
-//         totalItems: total,
-//         totalPages: Math.ceil(total / limit),
-//         currentPage: page,
-//         pageSize: limit
-//       }
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// }
-
 export const getAll = async (req, res, next) => {
   try {
     let page = parseInt(req.query.page) || 1
