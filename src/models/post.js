@@ -7,7 +7,7 @@ const postImageSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema(
   {
     description: { type: String, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     images: {
       type: [postImageSchema],
       validate: {

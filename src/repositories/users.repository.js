@@ -10,7 +10,7 @@ export const findByIdWithRelations = (id) =>
   User.findById(id)
     .populate({
       path: 'posts',
-      populate: [{ path: 'userId', select: '_id nickName' }, { path: 'tags' }],
+      populate: [{ path: 'author', select: '_id nickName name profileImage' }, { path: 'tags' }],
     })
     .populate('followers', '_id nickName name')
     .populate('following', '_id nickName name')

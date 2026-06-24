@@ -21,7 +21,7 @@ export const generateDummyData = async () => {
 
   const post = await Post.create({
     description: 'Mi primer post con datos dummy',
-    userId: user._id,
+    author: user._id,
     images: [
       {
         url: 'https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?q=100&w=687&auto=format',

@@ -11,7 +11,7 @@ export const getById = (id, commentCutoff) =>
 export const create = async (data, file) => {
   const createData = {
     description: data.description,
-    userId: data.userId,
+    author: data.userId,
   }
 
   if (file) {

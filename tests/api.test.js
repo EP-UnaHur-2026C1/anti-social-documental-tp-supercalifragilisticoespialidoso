@@ -28,14 +28,12 @@ describe('Users - CRUD', () => {
   })
 
   it('POST /users crea un usuario correctamente', async () => {
-    const res = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'juan_perez',
-        email: 'juan@test.com',
-        name: 'Juan Perez',
-        password: 'pass123',
-      })
+    const res = await request(app).post('/users').send({
+      nickName: 'juan_perez',
+      email: 'juan@test.com',
+      name: 'Juan Perez',
+      password: 'pass123',
+    })
     expect(res.status).toBe(201)
     expect(res.body).toMatchObject({ nickName: 'juan_perez', email: 'juan@test.com' })
     expect(res.body.id).toBeDefined()
@@ -105,14 +103,12 @@ describe('Posts - CRUD', () => {
   let userId
 
   beforeAll(async () => {
-    const { body } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'post_owner',
-        email: 'powner@test.com',
-        name: 'Post Owner',
-        password: 'pass123',
-      })
+    const { body } = await request(app).post('/users').send({
+      nickName: 'post_owner',
+      email: 'powner@test.com',
+      name: 'Post Owner',
+      password: 'pass123',
+    })
     userId = body.id
   })
 
@@ -126,14 +122,14 @@ describe('Posts - CRUD', () => {
       })
     expect(res.status).toBe(201)
     expect(res.body.description).toBe('Mi primera publicación')
-    expect(res.body.userId).toBe(userId)
+    expect(res.body.author._id).toBe(userId)
   })
 
   it('GET /posts devuelve lista de posts', async () => {
     const res = await request(app).get('/posts')
     expect(res.status).toBe(200)
-    expect(Array.isArray(res.body)).toBe(true)
-    expect(res.body.length).toBeGreaterThan(0)
+    expect(Array.isArray(res.body.data)).toBe(true)
+    expect(res.body.data.length).toBeGreaterThan(0)
   })
 
   it('GET /posts/:id incluye images, tags y comments', async () => {
@@ -183,14 +179,12 @@ describe('Posts - Imágenes', () => {
   let postId
 
   beforeAll(async () => {
-    const { body: user } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'img_owner',
-        email: 'img@test.com',
-        name: 'Img Owner',
-        password: 'pass123',
-      })
+    const { body: user } = await request(app).post('/users').send({
+      nickName: 'img_owner',
+      email: 'img@test.com',
+      name: 'Img Owner',
+      password: 'pass123',
+    })
     const { body: post } = await request(app)
       .post('/posts')
       .send({
@@ -242,14 +236,12 @@ describe('Tags - CRUD y relación N:M con Posts', () => {
   let userId, postId1, postId2, tagId
 
   beforeAll(async () => {
-    const { body: user } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'tag_owner',
-        email: 'tag@test.com',
-        name: 'Tag Owner',
-        password: 'pass123',
-      })
+    const { body: user } = await request(app).post('/users').send({
+      nickName: 'tag_owner',
+      email: 'tag@test.com',
+      name: 'Tag Owner',
+      password: 'pass123',
+    })
     userId = user.id
 
     const { body: p1 } = await request(app)
@@ -330,14 +322,12 @@ describe('Comments - CRUD', () => {
   let userId, postId
 
   beforeAll(async () => {
-    const { body: user } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'comment_owner',
-        email: 'co@test.com',
-        name: 'Comment Owner',
-        password: 'pass123',
-      })
+    const { body: user } = await request(app).post('/users').send({
+      nickName: 'comment_owner',
+      email: 'co@test.com',
+      name: 'Comment Owner',
+      password: 'pass123',
+    })
     userId = user.id
     const { body: post } = await request(app)
       .post('/posts')
@@ -395,14 +385,12 @@ describe('Comments - Filtro por COMMENT_MONTHS', () => {
   let userId, postId
 
   beforeAll(async () => {
-    const { body: user } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'date_owner',
-        email: 'date@test.com',
-        name: 'Date Owner',
-        password: 'pass123',
-      })
+    const { body: user } = await request(app).post('/users').send({
+      nickName: 'date_owner',
+      email: 'date@test.com',
+      name: 'Date Owner',
+      password: 'pass123',
+    })
     userId = user.id
     const { body: post } = await request(app)
       .post('/posts')
@@ -465,30 +453,24 @@ describe('Followers - N:M entre usuarios', () => {
   let user1Id, user2Id, user3Id
 
   beforeAll(async () => {
-    const { body: u1 } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'follower1',
-        email: 'f1@test.com',
-        name: 'Follower 1',
-        password: 'pass123',
-      })
-    const { body: u2 } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'follower2',
-        email: 'f2@test.com',
-        name: 'Follower 2',
-        password: 'pass123',
-      })
-    const { body: u3 } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'follower3',
-        email: 'f3@test.com',
-        name: 'Follower 3',
-        password: 'pass123',
-      })
+    const { body: u1 } = await request(app).post('/users').send({
+      nickName: 'follower1',
+      email: 'f1@test.com',
+      name: 'Follower 1',
+      password: 'pass123',
+    })
+    const { body: u2 } = await request(app).post('/users').send({
+      nickName: 'follower2',
+      email: 'f2@test.com',
+      name: 'Follower 2',
+      password: 'pass123',
+    })
+    const { body: u3 } = await request(app).post('/users').send({
+      nickName: 'follower3',
+      email: 'f3@test.com',
+      name: 'Follower 3',
+      password: 'pass123',
+    })
     user1Id = u1.id
     user2Id = u2.id
     user3Id = u3.id
@@ -576,14 +558,12 @@ describe('Validaciones Joi', () => {
   })
 
   it('rechaza imagen con URL inválida', async () => {
-    const { body: user } = await request(app)
-      .post('/users')
-      .send({
-        nickName: 'val_img_user',
-        email: 'vi@test.com',
-        name: 'Val Img',
-        password: 'pass123',
-      })
+    const { body: user } = await request(app).post('/users').send({
+      nickName: 'val_img_user',
+      email: 'vi@test.com',
+      name: 'Val Img',
+      password: 'pass123',
+    })
     const { body: post } = await request(app)
       .post('/posts')
       .send({
