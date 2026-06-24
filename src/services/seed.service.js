@@ -7,11 +7,10 @@ export const generateDummyData = async () => {
   const user = await User.create({
     nickName: `user_${Date.now()}`,
     email: `user_${Date.now()}@example.com`,
-    name: 'Usuario Demo',
+    name: 'Mariana Sanchez',
     password: hashedPassword,
     bio: 'Este es un usuario de demostración',
-    profileImage:
-      'https://media.istockphoto.com/id/1980276924/es/vector/sin-elemento-gr%C3%A1fico-en-miniatura-de-la-foto-no-se-ha-encontrado-ninguna-imagen-o-est%C3%A1.jpg?s=2048x2048&w=is&k=20&c=03lYDEXc3sSthiN8k4YnlpHecFbGdCPMjqBNWc0D5WM=',
+    profileImage: 'https://images.unsplash.com/photo-1506863530036-1efeddceb993?q=80&w=1044',
   })
 
   const tags = await Tag.insertMany([
@@ -24,8 +23,12 @@ export const generateDummyData = async () => {
     description: 'Mi primer post con datos dummy',
     userId: user._id,
     images: [
-      { url: 'https://via.placeholder.com/600x400?text=Demo+Image+1' },
-      { url: 'https://via.placeholder.com/600x400?text=Demo+Image+2' },
+      {
+        url: 'https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?q=100&w=687&auto=format',
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?q=100&w=687&auto=format',
+      },
     ],
     tags: [tags[0]._id, tags[1]._id],
   })
@@ -36,6 +39,7 @@ export const generateDummyData = async () => {
   ])
 
   user.posts.push(post._id)
+
   await user.save()
 
   return {

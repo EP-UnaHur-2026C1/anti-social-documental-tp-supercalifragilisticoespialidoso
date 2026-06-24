@@ -318,6 +318,27 @@
           }
         },
         {
+          "name": "Obtener posts de usuario A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('Status 200', () => pm.response.to.have.status(200));"],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{user1Id}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{user1Id}}", "posts"]
+            }
+          }
+        },
+        {
           "name": "Dejar de seguir usuario",
           "event": [
             {
