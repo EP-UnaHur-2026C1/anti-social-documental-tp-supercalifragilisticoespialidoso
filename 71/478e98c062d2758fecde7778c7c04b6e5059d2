@@ -1,0 +1,30 @@
+tests/api.test.js
+  s_ae53867ad76430::t_32669b56aa0323 13
+  h_a5ee0ed7d5d05d 17
+  s_ae53867ad76430::t_6aa9aca40dca28 431-449
+MODELADO.md
+  s_ae53867ad76430::t_2c50e2c30a325f 1-89
+.env.example
+  h_a5ee0ed7d5d05d 1,4-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "71478e98c062d2758fecde7778c7c04b6e5059d2",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_ae53867ad76430": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "40a51fe8-eb66-4eb0-8a50-04b5d3842c99",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
