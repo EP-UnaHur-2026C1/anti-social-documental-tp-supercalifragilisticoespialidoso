@@ -108,7 +108,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nickName\": \"anti_user_a_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_a_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario A\"\n}"
+              "raw": "{\n  \"nickName\": \"anti_user_a_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_a_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario A\",\n  \"password\": \"testPassword123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/users",
@@ -142,7 +142,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nickName\": \"anti_user_b_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_b_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario B\"\n}"
+              "raw": "{\n  \"nickName\": \"anti_user_b_{{$timestamp}}_{{$randomInt}}\",\n  \"email\": \"anti_user_b_{{$timestamp}}_{{$randomInt}}@example.com\",\n  \"name\": \"Usuario B\",\n  \"password\": \"testPassword123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/users",
@@ -503,10 +503,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"Post de prueba {{$timestamp}}\",\n  \"userId\": {{user1Id}}\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/posts",
+              "raw": "{\n  \"description\": \"Post de prueba {{$timestamp}}\",\n  \"userId\": \"{{user1Id}}\",\n  \"images\": [\n    {\n      \"url\": \"assets/ANTI-SOCIALNET.jpeg\"\n    }\n  ]\n}",
               "host": ["{{baseUrl}}"],
               "path": ["posts"]
             }
@@ -719,7 +716,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"text\": \"Comentario de prueba {{$timestamp}}\",\n  \"userId\": {{user2Id}},\n  \"postId\": {{postId}}\n}"
+              "raw": "{\n  \"text\": \"Comentario de prueba {{$timestamp}}\",\n  \"userId\": \"{{user2Id}}\",\n  \"postId\": \"{{postId}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/comments",
