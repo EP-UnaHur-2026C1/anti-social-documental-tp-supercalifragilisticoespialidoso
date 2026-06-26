@@ -10,9 +10,11 @@ let mongoServer
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create()
   await mongoose.connect(mongoServer.getUri())
+  await Promise.all(Object.values(mongoose.models).map((m) => m.createIndexes()))
 })
 
 afterAll(async () => {
+  await mongoose.connection.dropDatabase()
   await mongoose.connection.close()
   await mongoServer.stop()
 })
@@ -426,23 +428,25 @@ describe('Comments - Filtro por COMMENT_MONTHS', () => {
   })
 
   it('el valor de COMMENT_MONTHS es configurable via env', async () => {
-    process.env.COMMENT_MONTHS = '1'
+    try {
+      process.env.COMMENT_MONTHS = '1'
 
-    const { body: c } = await request(app)
-      .post('/comments')
-      .send({ text: 'Comentario de 2 meses', postId, userId })
+      const { body: c } = await request(app)
+        .post('/comments')
+        .send({ text: 'Comentario de 2 meses', postId, userId })
 
-    const twoMonthsAgo = new Date()
-    twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2)
-    await Comment.collection.updateOne(
-      { _id: new mongoose.Types.ObjectId(c.id) },
-      { $set: { createdAt: twoMonthsAgo } },
-    )
+      const twoMonthsAgo = new Date()
+      twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2)
+      await Comment.collection.updateOne(
+        { _id: new mongoose.Types.ObjectId(c.id) },
+        { $set: { createdAt: twoMonthsAgo } },
+      )
 
-    const res = await request(app).get(`/posts/${postId}`)
-    expect(res.body.comments.some((c) => c.text === 'Comentario de 2 meses')).toBe(false)
-
-    process.env.COMMENT_MONTHS = '6'
+      const res = await request(app).get(`/posts/${postId}`)
+      expect(res.body.comments.some((c) => c.text === 'Comentario de 2 meses')).toBe(false)
+    } finally {
+      process.env.COMMENT_MONTHS = '6'
+    }
   })
 })
 

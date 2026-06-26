@@ -1,5 +1,3 @@
-// services/sharp.service.js
-
 import sharp from 'sharp'
 
 export const optimizeImage = async (file) => {
