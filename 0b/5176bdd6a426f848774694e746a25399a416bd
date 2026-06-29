@@ -1,0 +1,30 @@
+src/controllers/users.controller.js
+  h_a5ee0ed7d5d05d 14-15
+src/services/users.service.js
+  h_a5ee0ed7d5d05d 8-9
+src/repositories/users.repository.js
+  h_a5ee0ed7d5d05d 17-23
+src/controllers/posts.controller.js
+  h_a5ee0ed7d5d05d 55
+src/routes/users.route.js
+  h_a5ee0ed7d5d05d 8,14-15
+src/services/sharp.service.js
+  h_a5ee0ed7d5d05d 4
+src/services/posts.service.js
+  h_a5ee0ed7d5d05d 31-34,36-41,43-44
+src/routes/posts.route.js
+  h_a5ee0ed7d5d05d 14
+src/middlewares/validateNickname.middleware.js
+  h_a5ee0ed7d5d05d 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "0b5176bdd6a426f848774694e746a25399a416bd",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
