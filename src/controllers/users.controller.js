@@ -11,6 +11,8 @@ export const getAll = async (req, res, next) => {
 
 export const getById = (req, res) => res.json(req.user)
 
+export const getByNickname = (req, res) => res.json(req.user)
+
 export const getFollowers = (req, res) => res.json(req.user.followers)
 
 export const getFollowing = (req, res) => res.json(req.user.following)

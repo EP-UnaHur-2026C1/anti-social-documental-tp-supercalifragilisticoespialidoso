@@ -11,7 +11,13 @@ const router = Router()
 router.get('/posts', postsController.getAll)
 router.get('/posts/:id', validatePostId, postsController.getById)
 router.post('/posts', uploadImage, schemaValidator(postSchema), postsController.create)
-router.put('/posts/:id', validatePostId, schemaValidator(updatePostSchema), postsController.update)
+router.put(
+  '/posts/:id',
+  validatePostId,
+  uploadImage,
+  schemaValidator(updatePostSchema),
+  postsController.update,
+)
 router.delete('/posts/:id', validatePostId, postsController.remove)
 
 // POST_IMAGES

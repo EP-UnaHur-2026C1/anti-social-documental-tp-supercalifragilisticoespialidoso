@@ -5,6 +5,8 @@ export const getAll = () => usersRepo.findAll()
 
 export const getById = (id) => usersRepo.findByIdWithRelations(id)
 
+export const getByNickname = (nickname) => usersRepo.findByNicknameWithRelations(nickname)
+
 export const create = (data) => usersRepo.create(data)
 
 export const update = async (user, data, file) => {

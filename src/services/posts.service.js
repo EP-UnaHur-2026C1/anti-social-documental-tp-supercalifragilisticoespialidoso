@@ -28,8 +28,20 @@ export const create = async (data, file) => {
   return postsRepo.create(createData)
 }
 
-export const update = (post, data) => postsRepo.update(post, data)
+export const update = async (post, data, file) => {
+  const updateData = {
+    description: data.description,
+  }
 
+  if (file) {
+    const result = await uploadImage(file)
+    updateData.images = [{ url: result.secure_url }]
+  } else if (data.images) {
+    updateData.images = data.images
+  }
+
+  return postsRepo.update(post, updateData)
+}
 export const remove = (post) => postsRepo.remove(post)
 
 export const findImage = (id, postId) => postsRepo.findImage(id, postId)

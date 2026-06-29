@@ -10,10 +10,21 @@ export const findByIdWithRelations = (id) =>
   User.findById(id)
     .populate({
       path: 'posts',
+      options: { sort: { createdAt: -1 } },
       populate: [{ path: 'author', select: '_id nickName name profileImage' }, { path: 'tags' }],
     })
-    .populate('followers', '_id nickName name')
-    .populate('following', '_id nickName name')
+    .populate('followers', '_id nickName name profileImage')
+    .populate('following', '_id nickName name profileImage')
+
+export const findByNicknameWithRelations = (nickName) =>
+  User.findOne({ nickName })
+    .populate({
+      path: 'posts',
+      options: { sort: { createdAt: -1 } },
+      populate: [{ path: 'author', select: '_id nickName name profileImage' }, { path: 'tags' }],
+    })
+    .populate('followers', '_id nickName name profileImage')
+    .populate('following', '_id nickName name profileImage')
 
 export const findByIdWithFollowers = (id) =>
   User.findById(id).populate('followers', '_id nickName name')
