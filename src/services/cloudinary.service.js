@@ -16,7 +16,6 @@ export const uploadImage = async (file) => {
         reject(error)
         return
       }
-
       resolve(result)
     })
 
