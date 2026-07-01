@@ -1,0 +1,27 @@
+src/repositories/users.repository.js
+  s_1b284c4de57fcd::t_d7ae012e5203fb 62-63,65
+  s_1b284c4de57fcd::t_fcc3531f03b4c4 67-71,73-77
+src/repositories/posts.repository.js
+  s_1b284c4de57fcd::t_90c852da54458d 9-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.5",
+  "base_commit_sha": "c6c5fa7c0670123f924011c268eed9bd44a77c71",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_1b284c4de57fcd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5d407e22-6a1a-44c1-ac29-513276a1b2a2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
