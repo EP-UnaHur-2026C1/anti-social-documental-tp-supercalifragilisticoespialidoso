@@ -1,0 +1,32 @@
+src/controllers/posts.controller.js
+  s_a89a108f1c8664::t_0706b56c2ee0df 14,20
+  s_a89a108f1c8664::t_3d2b7161bf13af 29
+src/repositories/posts.repository.js
+  s_a89a108f1c8664::t_4f33dc0fdad057 9
+  s_a89a108f1c8664::t_bdd5461f9743ef 4,6-8,10-20
+src/services/posts.service.js
+  s_a89a108f1c8664::t_806f0f9de78351 4,6
+src/services/seed.service.js
+  h_a5ee0ed7d5d05d 159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.5",
+  "base_commit_sha": "89a1503d9da1620b072ad62f414c5a0b98c42eef",
+  "prompts": {},
+  "humans": {
+    "h_a5ee0ed7d5d05d": {
+      "author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a89a108f1c8664": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6f63d782-82cf-4289-a631-a9763fd67dea",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "thomasbarenghi <thomasbarenghi@gmail.com>"
+    }
+  }
+}
