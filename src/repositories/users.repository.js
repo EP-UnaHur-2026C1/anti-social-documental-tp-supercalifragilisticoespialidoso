@@ -59,21 +59,19 @@ export const findByIdWithFollowing = (id) =>
 
 export const create = (data) => User.create(data)
 
-export const update = (user, data) => {
-  Object.assign(user, data)
-  return user.save()
-}
+export const update = (user, data) =>
+  User.findByIdAndUpdate(user._id, data, { new: true, runValidators: true })
 
-export const remove = (user) => user.deleteOne()
+export const remove = (user) => User.findByIdAndDelete(user._id)
 
-export const addFollowing = async (follower, followed) => {
-  follower.following.push(followed._id)
-  followed.followers.push(follower._id)
-  await Promise.all([follower.save(), followed.save()])
-}
+export const addFollowing = (follower, followed) =>
+  Promise.all([
+    User.findByIdAndUpdate(follower._id, { $addToSet: { following: followed._id } }),
+    User.findByIdAndUpdate(followed._id, { $addToSet: { followers: follower._id } }),
+  ])
 
-export const removeFollowing = async (follower, followed) => {
-  follower.following.pull(followed._id)
-  followed.followers.pull(follower._id)
-  await Promise.all([follower.save(), followed.save()])
-}
+export const removeFollowing = (follower, followed) =>
+  Promise.all([
+    User.findByIdAndUpdate(follower._id, { $pull: { following: followed._id } }),
+    User.findByIdAndUpdate(followed._id, { $pull: { followers: follower._id } }),
+  ])

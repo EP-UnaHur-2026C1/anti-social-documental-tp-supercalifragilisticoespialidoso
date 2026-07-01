@@ -6,7 +6,12 @@ export const findAll = async (skip, limit, seed) => {
     Post.aggregate([
       {
         $addFields: {
-          _sortKey: { $mod: [{ $add: [{ $toLong: { $toDate: '$_id' } }, seed] }, 1_000_000_007] },
+          _sortKey: {
+            $mod: [
+              { $multiply: [{ $mod: [{ $toLong: { $toDate: '$_id' } }, 1_000_003] }, seed || 1] },
+              1_000_000_007,
+            ],
+          },
         },
       },
       { $sort: { _sortKey: 1 } },
