@@ -2,14 +2,32 @@ import mongoose from 'mongoose'
 import { Post, Comment, User } from '../models/index.js'
 
 export const findAll = async (skip, limit) => {
-  const [items, total] = await Promise.all([
+  const [posts, total] = await Promise.all([
     Post.find()
+      .sort({ createdAt: -1 })
       .populate('author', '_id nickName name profileImage')
       .populate('tags')
       .skip(skip)
       .limit(limit),
     Post.countDocuments(),
   ])
+
+  const postIds = posts.map((p) => p._id)
+  const comments = await Comment.find({ postId: { $in: postIds } }).populate(
+    'userId',
+    '_id nickName name profileImage',
+  )
+
+  const commentsByPost = comments.reduce((acc, c) => {
+    const key = c.postId.toString()
+    ;(acc[key] ??= []).push(c)
+    return acc
+  }, {})
+
+  const items = posts.map((p) => ({
+    ...p.toJSON(),
+    comments: commentsByPost[p._id.toString()] ?? [],
+  }))
 
   return { items, total }
 }
