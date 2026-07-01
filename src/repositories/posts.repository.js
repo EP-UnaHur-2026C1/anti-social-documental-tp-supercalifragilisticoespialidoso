@@ -3,12 +3,13 @@ import { Post, Comment, User } from '../models/index.js'
 
 export const findAll = async (skip, limit) => {
   const [posts, total] = await Promise.all([
-    Post.find()
-      .sort({ createdAt: -1 })
-      .populate('author', '_id nickName name profileImage')
-      .populate('tags')
-      .skip(skip)
-      .limit(limit),
+    Post.aggregate([{ $sample: { size: skip + limit } }, { $skip: skip }, { $limit: limit }]).then(
+      (docs) =>
+        Post.populate(docs, [
+          { path: 'author', select: '_id nickName name profileImage' },
+          { path: 'tags' },
+        ]),
+    ),
     Post.countDocuments(),
   ])
 
@@ -25,7 +26,7 @@ export const findAll = async (skip, limit) => {
   }, {})
 
   const items = posts.map((p) => ({
-    ...p.toJSON(),
+    ...p,
     comments: commentsByPost[p._id.toString()] ?? [],
   }))
 
