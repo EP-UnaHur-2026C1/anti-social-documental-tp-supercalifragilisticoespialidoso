@@ -156,7 +156,7 @@ const POSTS_DATA = [
   {
     description:
       'Colección creciendo 🎵 ¿Cuántos pedales son demasiados pedales? La respuesta correcta es nunca.',
-    images: [{ url: 'https://images.unsplash.com/photo-1490750967868-88df5691cc28?q=80&w=800' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?q=80&w=2070' }],
     tags: ['musica'],
   },
   {

@@ -1,9 +1,9 @@
 import * as postsRepo from '../repositories/posts.repository.js'
 import { uploadImage } from './cloudinary.service.js'
 
-export const getAll = (page, limit) => {
+export const getAll = (page, limit, seed) => {
   const skip = (page - 1) * limit
-  return postsRepo.findAll(skip, limit)
+  return postsRepo.findAll(skip, limit, seed)
 }
 export const getById = (id, commentCutoff) =>
   commentCutoff ? postsRepo.findByIdWithRelations(id, commentCutoff) : postsRepo.findById(id)

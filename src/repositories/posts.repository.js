@@ -1,14 +1,23 @@
 import mongoose from 'mongoose'
 import { Post, Comment, User } from '../models/index.js'
 
-export const findAll = async (skip, limit) => {
+export const findAll = async (skip, limit, seed) => {
   const [posts, total] = await Promise.all([
-    Post.aggregate([{ $sample: { size: skip + limit } }, { $skip: skip }, { $limit: limit }]).then(
-      (docs) =>
-        Post.populate(docs, [
-          { path: 'author', select: '_id nickName name profileImage' },
-          { path: 'tags' },
-        ]),
+    Post.aggregate([
+      {
+        $addFields: {
+          _sortKey: { $mod: [{ $add: [{ $toLong: { $toDate: '$_id' } }, seed] }, 1_000_000_007] },
+        },
+      },
+      { $sort: { _sortKey: 1 } },
+      { $skip: skip },
+      { $limit: limit },
+      { $unset: '_sortKey' },
+    ]).then((docs) =>
+      Post.populate(docs, [
+        { path: 'author', select: '_id nickName name profileImage' },
+        { path: 'tags' },
+      ]),
     ),
     Post.countDocuments(),
   ])

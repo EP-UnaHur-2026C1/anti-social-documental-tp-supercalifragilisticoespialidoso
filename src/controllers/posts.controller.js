@@ -11,12 +11,13 @@ export const getAll = async (req, res, next) => {
   try {
     let page = parseInt(req.query.page) || 1
     let limit = parseInt(req.query.limit) || 10
+    const seed = parseInt(req.query.seed) || Math.floor(Math.random() * 1_000_000_007)
 
     if (page < 1) page = 1
     if (limit < 1) limit = 10
     if (limit > 50) limit = 50
 
-    const { items, total } = await postsService.getAll(page, limit)
+    const { items, total } = await postsService.getAll(page, limit, seed)
 
     res.json({
       data: items,
@@ -25,6 +26,7 @@ export const getAll = async (req, res, next) => {
         totalPages: Math.ceil(total / limit),
         currentPage: page,
         limit,
+        seed,
       },
     })
   } catch (err) {
