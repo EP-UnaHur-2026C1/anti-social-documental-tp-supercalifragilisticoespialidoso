@@ -18,8 +18,12 @@ export const register = async (data) => {
   })
 }
 
-export const login = async (email, password) => {
-  const user = await usersRepo.findByEmail(email)
+export const login = async (identifier, password) => {
+  const isEmail = identifier.includes('@')
+  const user = isEmail
+    ? await usersRepo.findByEmail(identifier)
+    : await usersRepo.findByNickname(identifier)
+
   if (!user) throw new Error('Credenciales inválidas')
 
   const isValid = await comparePassword(password, user.password)

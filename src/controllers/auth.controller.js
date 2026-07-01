@@ -11,7 +11,8 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const user = await authService.login(req.body.email, req.body.password)
+    const { identifier, password } = req.body
+    const user = await authService.login(identifier, password)
     res.json({ message: 'Login exitoso', user })
   } catch (err) {
     const status = err.message === 'Credenciales inválidas' ? 401 : 500

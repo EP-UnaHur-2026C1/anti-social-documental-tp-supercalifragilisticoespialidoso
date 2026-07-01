@@ -29,10 +29,10 @@ export const userSchema = Joi.object({
   })
 
 export const loginSchema = Joi.object({
-  email: Joi.string().email().required().messages({
-    'any.required': 'email es requerido',
-    'string.email': 'email debe ser una dirección de correo válida',
-    'string.empty': 'email no puede estar vacío',
+  identifier: Joi.string().min(3).required().messages({
+    'any.required': 'identifier es requerido',
+    'string.min': 'identifier debe tener al menos {#limit} caracteres',
+    'string.empty': 'identifier no puede estar vacío',
   }),
   password: Joi.string().required().messages({
     'any.required': 'password es requerido',

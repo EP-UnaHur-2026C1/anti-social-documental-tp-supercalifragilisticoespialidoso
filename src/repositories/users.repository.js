@@ -6,6 +6,8 @@ export const findById = (id) => User.findById(id)
 
 export const findByEmail = (email) => User.findOne({ email })
 
+export const findByNickname = (nickName) => User.findOne({ nickName })
+
 export const findByIdWithRelations = (id) =>
   User.findById(id)
     .populate({
